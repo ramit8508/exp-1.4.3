@@ -1,0 +1,57 @@
+config:
+  target: "http://localhost:3000"
+  phases:
+    # Warm-up phase
+    - duration: 10
+      arrivalRate: 5
+      name: "Warm-up"
+    
+    # Ramp-up phase
+    - duration: 30
+      arrivalRate: 10
+      rampTo: 50
+      name: "Ramp-up concurrent users"
+    
+    # Sustained load phase
+    - duration: 60
+      arrivalRate: 50
+      name: "Sustained high load"
+    
+    # Spike test
+    - duration: 20
+      arrivalRate: 100
+      name: "Spike test"
+
+  processor: "./test-processor.js"
+
+scenarios:
+  # Scenario 1: Book random available seat
+  - name: "Book random seat"
+    weight: 70
+    flow:
+      - get:
+          url: "/api/seats/available"
+          capture:
+            - json: "$.seats"
+              as: "availableSeats"
+      - function: "selectRandomSeat"
+      - post:
+          url: "/api/book"
+          json:
+            seatId: "{{ seatId }}"
+            userName: "User{{ $randomNumber() }}"
+            email: "user{{ $randomNumber() }}@example.com"
+
+  # Scenario 2: View available seats
+  - name: "View available seats"
+    weight: 20
+    flow:
+      - get:
+          url: "/api/seats/available"
+
+  # Scenario 3: View statistics
+  - name: "View statistics"
+    weight: 10
+    flow:
+      - get:
+          url: "/api/stats"
