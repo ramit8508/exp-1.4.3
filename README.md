@@ -19,8 +19,9 @@
 6. [API Endpoints](#api-endpoints)
 7. [Load Testing](#load-testing)
 8. [How It Works](#how-it-works)
-9. [Viva Questions](#viva-questions)
-10. [Project Structure](#project-structure)
+9. [Deployment](#deployment)
+10. [Viva Questions](#viva-questions)
+11. [Project Structure](#project-structure)
 
 ---
 
@@ -402,6 +403,51 @@ User B: Retry → Seat no longer available
 - **Graceful Shutdown**: Clean up resources and release locks on shutdown
 - **Health Checks**: Monitor system health and Redis connectivity
 - **Compensating Transactions**: Rollback operations if booking fails midway
+
+---
+
+## Deployment
+
+### Deploy to Render (Cloud Platform)
+
+This application is ready for deployment on Render with zero configuration.
+
+#### Quick Deploy
+
+1. Push your code to a Git repository (GitHub, GitLab, or Bitbucket)
+2. Go to [Render Dashboard](https://dashboard.render.com/)
+3. Click "New +" → "Blueprint"
+4. Connect your repository
+5. Render will automatically detect `render.yaml` and set everything up
+
+The `render.yaml` file automatically configures:
+- Web service with Node.js runtime
+- Redis instance (free tier)
+- All environment variables
+- Health check endpoint
+- Auto-deploy on Git push
+
+#### Manual Configuration
+
+If you prefer manual setup, see the detailed **[RENDER_DEPLOY.md](RENDER_DEPLOY.md)** guide.
+
+#### What Gets Deployed
+
+✅ Express API server  
+✅ Redis database (managed service)  
+✅ Health monitoring  
+✅ Automatic restarts  
+✅ HTTPS enabled by default  
+
+#### Production Checklist
+
+- [ ] MongoDB connection string configured
+- [ ] Environment variables set in Render dashboard
+- [ ] Health check endpoint responding
+- [ ] Test API endpoints
+- [ ] Monitor logs for any errors
+
+**Free Tier Note:** Service spins down after 15 minutes of inactivity. First request may take 30+ seconds.
 
 ---
 

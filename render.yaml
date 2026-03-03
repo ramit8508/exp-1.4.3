@@ -12,20 +12,16 @@ services:
       - key: NODE_ENV
         value: production
       - key: REDIS_HOST
-        fromService:
-          type: redis
-          name: ticket-booking-redis
-          property: host
+        sync: false
+        # Set this manually in Render dashboard with your Upstash/Redis Cloud endpoint
       - key: REDIS_PORT
-        fromService:
-          type: redis
-          name: ticket-booking-redis
-          property: port
+        sync: false
+        # Set this manually in Render dashboard (usually 6379)
       - key: REDIS_PASSWORD
-        fromService:
-          type: redis
-          name: ticket-booking-redis
-          property: password
+        sync: false
+        # Set this manually in Render dashboard with your Redis password
+      - key: REDIS_DB
+        value: 0
       - key: TOTAL_SEATS
         value: 50
       - key: LOCK_TIMEOUT
@@ -36,11 +32,3 @@ services:
         value: 300
       - key: CORS_ORIGIN
         value: "*"
-
-  # Redis Database
-  - type: redis
-    name: ticket-booking-redis
-    region: oregon
-    plan: free
-    maxmemoryPolicy: noeviction
-    ipAllowList: []
