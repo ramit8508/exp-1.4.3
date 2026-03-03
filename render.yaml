@@ -1,0 +1,46 @@
+services:
+  # Redis Ticket Booking System
+  - type: web
+    name: ticket-booking-api
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: REDIS_HOST
+        fromService:
+          type: redis
+          name: ticket-booking-redis
+          property: host
+      - key: REDIS_PORT
+        fromService:
+          type: redis
+          name: ticket-booking-redis
+          property: port
+      - key: REDIS_PASSWORD
+        fromService:
+          type: redis
+          name: ticket-booking-redis
+          property: password
+      - key: TOTAL_SEATS
+        value: 50
+      - key: LOCK_TIMEOUT
+        value: 5000
+      - key: PROCESSING_MIN_DELAY
+        value: 100
+      - key: PROCESSING_MAX_DELAY
+        value: 300
+      - key: CORS_ORIGIN
+        value: "*"
+
+  # Redis Database
+  - type: redis
+    name: ticket-booking-redis
+    region: oregon
+    plan: free
+    maxmemoryPolicy: noeviction
+    ipAllowList: []
